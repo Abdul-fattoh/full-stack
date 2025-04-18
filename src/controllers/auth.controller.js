@@ -1,9 +1,9 @@
 import bcrypt from 'bcrypt';
 
-import {User} from '../models/user.model.js';
-import {jwtAccessTokenGenerator, jwtRefreshTokenGenerator} from '../common/index.js';
+import { User } from '../models/user.model.js';
+import { jwtAccessTokenGenerator, jwtRefreshTokenGenerator } from '../common/index.js';
 
-export const authController ={
+export const authController = {
     signUp: async (req, res, next) => {
         try {
             const body = req.body;
@@ -21,9 +21,11 @@ export const authController ={
             const newUser = new User(body);
             await newUser.save();
 
-            res.status(201).send({ message: 'User created successfully', user: newUser });
+            const { password, ...userWithOutPassword } = newUser._doc;
+
+            res.status(201).send({ message: 'User created successfully', user: userWithOutPassword });
         } catch (error) {
-            next(error)   
+            next(error)
         }
     },
     signIn: async (req, res, next) => {
@@ -60,7 +62,7 @@ export const authController ={
                 }
             });
         } catch (error) {
-            next(error)   
+            next(error)
         }
     }
 }
