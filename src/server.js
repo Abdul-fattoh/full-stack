@@ -1,15 +1,18 @@
-import express from 'express';
-import { config } from 'dotenv';
-import { connectDB } from './config/db.js';
-import { authRouter } from './routes/auth.routes.js';
-config();
+import { app } from './app.js';
 
-const app = express();
-const PORT = +process.env.PORT;
+import { config } from './config/index.js';
+import { connectDB } from './db/index.js';
 
-app.use(express.json());
-await connectDB();
+async function startServer() {
+    try {
+        await connectDB();
+        app.listen(config.api.port, () => {
+            console.log(`Server is running on port ${config.api.port}`);
+        });
+    } catch (error) {
+        console.error('Failed to start server:', error.message);
+        process.exit(1);
+    }
+}
 
-app.use('/api/users', authRouter);
-
-app.listen(PORT, () => console.log('Server running on port', PORT));
+startServer();
