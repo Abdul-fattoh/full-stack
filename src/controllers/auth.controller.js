@@ -14,7 +14,7 @@ export class UserController {
                 throw new Error(`Error on creating admin: ${error}`);
             }
 
-            const { username, password } = value;
+            const { fullName, email, password, role } = value;
             const checkAdmin = await User.findOne({ role });
 
             if (checkAdmin && role === 'admin') {
@@ -26,7 +26,7 @@ export class UserController {
 
             const hashedPassword = await decode(password, 7);
             const admin = await User.create({
-                username, hashedPassword, role: 'admin'
+                fullName, email, password: hashedPassword, role: 'admin'
             });
 
             return res.status(201).json({
@@ -72,7 +72,7 @@ export class UserController {
                 throw new Error("User not found");
             }
 
-            const isMatchPassword = await encode(password, user.hashedPassword);
+            const isMatchPassword = await encode(password, user.password);
 
             if (!isMatchPassword) {
                 throw new Error("Invalid password");
@@ -94,16 +94,16 @@ export class UserController {
 
             const mailMessage = {
                 from: process.env.SMTP_USER,
-                // to: 'umarkhanhodjayev@gmail.com',
+                // to: 'umarkhanhodjaev@gmail.com',
                 to: 'a6du.xakim0v@gmail.com',
-                subject: 'Hala Madrid',
+                subject: 'Assalamu alaykum',
                 text: 'Danggg'
             }
 
             transporter.sendMail(mailMessage, function(err, info) {
                 if (err) {
                     console.log(err)
-                    catchError(res, 400, `Error on sending to mail: ${err}`);
+                    catchError(err, res);
                 } else {
                     console.log(info);
                 }
@@ -115,6 +115,7 @@ export class UserController {
                 data: accessToken
             });
         } catch (error) {
+            console.log(error)
             catchError(error, res);
         }
     }
@@ -141,7 +142,7 @@ export class UserController {
                 data: {}
             });
         } catch (error) {
-            catchError(res, 500, error.message);
+            catchError(err, res);
         }
     }
 

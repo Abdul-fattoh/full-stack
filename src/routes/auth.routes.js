@@ -12,7 +12,7 @@ router
     .post('/login', controller.loginUser)
     .post('/signOut', jwtAuthGuard, controller.signOutUser)
     .get('/:id', jwtAuthGuard, controller.getUserById)
-    .get('/', jwtAuthGuard, controller.getAllUsers)
+    .get('/', controller.getAllUsers)
     .patch('/:id', jwtAuthGuard, controller.updateUser)
     .delete('/:id', jwtAuthGuard, controller.deleteUser);
 

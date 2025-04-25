@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken';
-import { catchError } from '../utils/error-response.js';
+import { catchError } from '../middlewares/error.middleware.js';
 
 export const jwtAuthGuard = (req, res, next) => {
     try {
