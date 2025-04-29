@@ -12,7 +12,7 @@ const app = express();
 app.use(express.json());
 app.use(cookieParser());
 
-// const __dirname = path.resolve();
+const __dirname = path.resolve();
 const filePath = fs.createWriteStream(path.join(__dirname, 'access.log'), {
     flag: 'a'
 });
